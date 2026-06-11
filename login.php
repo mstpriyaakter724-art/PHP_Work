@@ -3,7 +3,7 @@ session_start();
 require_once "db_config.php";
 $error = "";
 if (isset($_POST["btn_submit"])) {
-    $name = $_POST["name"];
+    $name = trim( $_POST["name"]);
     $password = $_POST["password"];
 
     $stmt = $db->query("select * from users  where name='$name' and password= '$password' ");

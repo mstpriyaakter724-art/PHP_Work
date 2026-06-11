@@ -1,10 +1,12 @@
 
  <?php 
+   require_once "db_config.php";
     include_once("Student.php");
+
+
     if(isset($_GET["id"])){
        $id=$_GET["id"];
        $data = Student::find($id);
-       extract($data);
     }
 
     
@@ -45,25 +47,25 @@
     
     <form action="" method="post">
        <div>
-         <label class="form-label" for="id">ID</label> <br>
-          <input class="form-control" type="text" name="id" id="id" value=" <?php echo $data["sid"] ?? "" ?> ">
+         <!-- <label class="form-label" for="id">ID</label> <br> -->
+          <input hidden class="form-control" type="text" name="id" id="id" value=" <?php echo $data->id ?? "" ?> ">
        </div>
        <div>
          <label  class="form-label"for="name">Name</label> <br>
-          <input class="form-control" type="text" name="name" id="" value=" <?php echo ucfirst($name) ?? "" ?> ">
+          <input class="form-control" type="text" name="name" id="" value=" <?php echo ucfirst($data->name) ?? "" ?> ">
        </div>
        <div>
          <label class="form-label"  for="email">Email</label> <br>
-          <input  class="form-control" type="text" name="email" id="" value=" <?php echo $email ?? "" ?> ">
+          <input  class="form-control" type="text" name="email" id="" value=" <?php echo $data->email ?? "" ?> ">
        </div>
        <div>
          <label for="gender">Gender</label> <br>
-          <input   <?php echo $gender == "male" ? "checked" :"" ?>    class="form-check-input" type="radio" name="gender" id="" value="male">Male
-          <input  <?php echo $gender == "female" ? "checked" :"" ?>   class="form-check-input" type="radio" name="gender" id="" value="female">Female
+          <input   <?php echo $data->gender == "male" ? "checked" :"" ?>    class="form-check-input" type="radio" name="gender" id="" value="male">Male
+          <input  <?php echo $data->gender == "female" ? "checked" :"" ?>   class="form-check-input" type="radio" name="gender" id="" value="female">Female
        </div>
         <div>
          <label class="form-label" for="mobile">Mobile</label> <br>
-          <input class="form-control" type="text" name="mobile" id="mobile" value=" <?php echo $mobile ?? "" ?> ">
+          <input class="form-control" type="text" name="mobile" id="mobile" value=" <?php echo $data->mobile ?? "" ?> ">
        </div>
         <div>
         
