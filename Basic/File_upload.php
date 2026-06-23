@@ -6,7 +6,7 @@
         $size = $file["size"];
         $error = $file["error"];
         $type = $file["type"];
-        $img_name = "Rohan";
+        $img_name = "rohan";
         $allowed_type = ["application/pdf", "image/jpeg", "image/png"];
         $ex = pathinfo($name, PATHINFO_EXTENSION);
         if (in_array($type, $allowed_type)) {
@@ -46,6 +46,7 @@
      <!-- </form> -->
 
     <div >
+        
         <form action="" method="post" enctype="multipart/form-data">
             <div >
                 <label for="img">Img</label><br>
