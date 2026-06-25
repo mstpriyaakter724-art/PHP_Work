@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="bg-light py-5">
+         <div class="container ">
+        <div class="row text-center">
+            <!-- <div class="col-md-8"> -->
+                <h1>All User</h1>
+                <table class="table-bordered border-danger">
+                    <thead>
+                        <tr>
+                            <th>id</th>
+                            <th>name</th>
+                            <th>role_id</th>
+                            <th>email</th>
+                            <th>password</th>
+                            <th>created_at</th>
+                        </tr>
+                    </thead>
+                    <tbody id="user_table">
+
+                    </tbody>
+                </table>
+            <!-- </div> -->
+        </div>
+    </div>
+
+    </div>
+   
+
+
+
+
+
+    <script>
+
+        fetch("http://localhost/MySQL/API/user.php")
+            .then(res => res.json())
+            .then(data => {
+                let users = document.getElementById("user_table");
+                let html = "";
+
+                data.users.forEach((user, i) => {
+                    i++;
+                    html += `
+                <tr>
+                <td>${i}</td>
+                <td>${user.name}</td>
+                <td>${user.role_id}</td>
+                <td>${user.email}</td>
+                <td>${user.password}</td>
+                <td>${user.created_at}</td>
+            </tr>
+                
+                
+                
+                `
+                });
+                users.innerHTML = html;
+
+            })
+            .catch(err => console.log(err));
+
+
+
+
+
+    </script>
+</body>
+
+</html>
