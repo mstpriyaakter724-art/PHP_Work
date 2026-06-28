@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TradeSync – Smart Trade Management</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css"/>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"/>
+  <link rel="stylesheet" href="css/style.css"/>
+</head>
+<body>
+
+<!-- ══ SIDEBAR ══ -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-brand">
+    <div class="brand-icon"><i class="bi bi-boxes"></i></div>
+    <div class="brand-text">
+      <span class="brand-name">TradeSync</span>
+      <span class="brand-sub">Smart Trade Management</span>
+    </div>
+  </div>
+  <div class="sidebar-search">
+    <i class="bi bi-search"></i>
+    <input type="text" placeholder="Search menu..."/>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Overview</div>
+    <a href="index.html" class="nav-item active"><i class="bi bi-speedometer2"></i><span>Dashboard</span></a>
+    <div class="nav-section-label">Import Process</div>
+    <a href="pages/suppliers.html"         class="nav-item"><i class="bi bi-building"></i><span>Suppliers</span></a>
+    <a href="pages/purchase-orders.html"   class="nav-item"><i class="bi bi-file-earmark-text"></i><span>Purchase Orders</span></a>
+    <a href="pages/proforma-invoices.html" class="nav-item"><i class="bi bi-receipt"></i><span>Proforma Invoices</span></a>
+    <a href="pages/letters-of-credit.html" class="nav-item"><i class="bi bi-bank"></i><span>Letters of Credit</span></a>
+    <a href="pages/shipments.html"         class="nav-item"><i class="bi bi-truck"></i><span>Shipments</span></a>
+    <a href="pages/import-costs.html"      class="nav-item"><i class="bi bi-currency-dollar"></i><span>Import Costs</span></a>
+    <a href="pages/grn.html"               class="nav-item"><i class="bi bi-clipboard-check"></i><span>GRN</span></a>
+    <div class="nav-section-label">Inventory</div>
+    <a href="pages/products.html"        class="nav-item"><i class="bi bi-box-seam"></i><span>Products</span></a>
+    <a href="pages/inventory.html"       class="nav-item"><i class="bi bi-grid-3x3-gap"></i><span>Inventory</span></a>
+    <a href="pages/warehouses.html"      class="nav-item"><i class="bi bi-houses"></i><span>Warehouses</span></a>
+    <a href="pages/stock-movements.html" class="nav-item"><i class="bi bi-arrow-left-right"></i><span>Stock Movements</span></a>
+    <div class="nav-section-label">Sales</div>
+    <a href="pages/customers.html"    class="nav-item"><i class="bi bi-people"></i><span>Customers</span></a>
+    <a href="pages/sales-orders.html" class="nav-item"><i class="bi bi-cart3"></i><span>Sales Orders</span></a>
+    <a href="pages/invoices.html"     class="nav-item"><i class="bi bi-file-earmark-invoice"></i><span>Invoices</span></a>
+    <a href="pages/deliveries.html"   class="nav-item"><i class="bi bi-box-arrow-right"></i><span>Deliveries</span></a>
+    <a href="pages/payments.html"     class="nav-item"><i class="bi bi-credit-card"></i><span>Payments</span></a>
+    <div class="nav-section-label">Reports</div>
+    <a href="pages/reports.html" class="nav-item"><i class="bi bi-bar-chart-line"></i><span>All Reports</span></a>
+    <div class="nav-section-label">System</div>
+    <a href="pages/users.html" class="nav-item"><i class="bi bi-person-gear"></i><span>Users</span></a>
+    <a href="pages/roles.html" class="nav-item"><i class="bi bi-shield-check"></i><span>Roles & Permissions</span></a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="user-mini">
+      <div class="user-avatar-sm">A</div>
+      <div class="user-info-sm">
+        <span class="user-name-sm">Admin User</span>
+        <span class="user-role-sm">Super Admin</span>
+      </div>
+      <a href="login.html" class="logout-btn" title="Logout"><i class="bi bi-box-arrow-right"></i></a>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MAIN CONTENT ══ -->
+<div class="main-content" id="mainContent">
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <button class="sidebar-toggle" id="sidebarToggle"><i class="bi bi-list"></i></button>
+      <div class="breadcrumb-area">
+        <span class="page-title">Dashboard</span>
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb mb-0"><li class="breadcrumb-item active">Overview</li></ol>
+        </nav>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <div class="topbar-date"><i class="bi bi-calendar3"></i> <span id="currentDate"></span></div>
+      <div class="topbar-divider"></div>
+      <div class="last-updated me-1"><span class="live-dot"></span><span id="last-refreshed"></span></div>
+      <button class="topbar-btn" id="refreshBtn" title="Refresh data"><i class="bi bi-arrow-clockwise"></i></button>
+      <button class="topbar-btn" id="themeToggle" title="Toggle theme"><i class="bi bi-moon-stars"></i></button>
+      <button class="topbar-btn position-relative" title="Notifications"><i class="bi bi-bell"></i><span class="notif-badge">4</span></button>
+      <div class="user-avatar">A</div>
+    </div>
+  </header>
+
+  <!-- PAGE BODY -->
+  <div class="page-body">
+
+    <!-- WELCOME BANNER -->
+    <div class="welcome-banner mb-4">
+      <div class="welcome-text">
+        <h2><span id="greeting">Good Morning</span>, Admin 👋</h2>
+        <p>Here's what's happening with your trade operations today.</p>
+      </div>
+      <div class="welcome-actions d-flex gap-2">
+        <button class="btn btn-sm btn-outline-light"><i class="bi bi-download me-1"></i>Export</button>
+        <button class="btn btn-sm btn-light text-primary"><i class="bi bi-plus me-1"></i>New Order</button>
+      </div>
+    </div>
+
+    <!-- KPI CARDS -->
+    <div class="row g-3 mb-3">
+      <div class="col-xl-3 col-md-6">
+        <div class="kpi-card kpi-import">
+          <div class="kpi-icon"><i class="bi bi-arrow-down-circle"></i></div>
+          <div class="kpi-body">
+            <div class="kpi-label">Total Import Value</div>
+            <div class="kpi-value" id="kpi-import">$0</div>
+            <div class="kpi-delta up"><i class="bi bi-arrow-up-short"></i>12.4% vs last month</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-3 col-md-6">
+        <div class="kpi-card kpi-inventory">
+          <div class="kpi-icon"><i class="bi bi-boxes"></i></div>
+          <div class="kpi-body">
+            <div class="kpi-label">Total Inventory</div>
+            <div class="kpi-value" id="kpi-inventory">0</div>
+            <div class="kpi-delta up"><i class="bi bi-arrow-up-short"></i>3.1% restocked</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-3 col-md-6">
+        <div class="kpi-card kpi-sales">
+          <div class="kpi-icon"><i class="bi bi-cart-check"></i></div>
+          <div class="kpi-body">
+            <div class="kpi-label">Total Sales</div>
+            <div class="kpi-value" id="kpi-sales">$0</div>
+            <div class="kpi-delta up"><i class="bi bi-arrow-up-short"></i>8.7% this week</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-3 col-md-6">
+        <div class="kpi-card kpi-profit">
+          <div class="kpi-icon"><i class="bi bi-graph-up-arrow"></i></div>
+          <div class="kpi-body">
+            <div class="kpi-label">Net Profit</div>
+            <div class="kpi-value" id="kpi-profit">$0</div>
+            <div class="kpi-delta down"><i class="bi bi-arrow-down-short"></i>2.1% margin dip</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECONDARY MINI STATS -->
+    <div class="row g-3 mb-4">
+      <div class="col-xl-2 col-md-4 col-6">
+        <div class="mini-stat"><i class="bi bi-file-earmark-text text-primary"></i>
+          <div class="ms-2"><div class="mini-label">Open POs</div><div class="mini-val" id="mini-pos">—</div></div></div>
+      </div>
+      <div class="col-xl-2 col-md-4 col-6">
+        <div class="mini-stat"><i class="bi bi-bank text-warning"></i>
+          <div class="ms-2"><div class="mini-label">Active LCs</div><div class="mini-val" id="mini-lcs">—</div></div></div>
+      </div>
+      <div class="col-xl-2 col-md-4 col-6">
+        <div class="mini-stat"><i class="bi bi-truck text-info"></i>
+          <div class="ms-2"><div class="mini-label">In Transit</div><div class="mini-val" id="mini-transit">—</div></div></div>
+      </div>
+      <div class="col-xl-2 col-md-4 col-6">
+        <div class="mini-stat alert-mini"><i class="bi bi-exclamation-triangle text-danger"></i>
+          <div class="ms-2"><div class="mini-label">Low Stock</div><div class="mini-val text-danger" id="mini-lowstock">—</div></div></div>
+      </div>
+      <div class="col-xl-2 col-md-4 col-6">
+        <div class="mini-stat"><i class="bi bi-people text-success"></i>
+          <div class="ms-2"><div class="mini-label">Customers</div><div class="mini-val" id="mini-customers">—</div></div></div>
+      </div>
+      <div class="col-xl-2 col-md-4 col-6">
+        <div class="mini-stat"><i class="bi bi-building text-secondary"></i>
+          <div class="ms-2"><div class="mini-label">Suppliers</div><div class="mini-val" id="mini-suppliers">—</div></div></div>
+      </div>
+    </div>
+
+    <!-- CHARTS ROW -->
+    <div class="row g-3 mb-4">
+      <div class="col-xl-8">
+        <div class="chart-card">
+          <div class="chart-header">
+            <div>
+              <h6 class="chart-title">Sales vs Import Cost</h6>
+              <p class="chart-sub">Monthly comparison — current year</p>
+            </div>
+            <div class="chart-actions">
+              <button class="chart-btn active" data-period="monthly">Monthly</button>
+              <button class="chart-btn" data-period="quarterly">Quarterly</button>
+            </div>
+          </div>
+          <canvas id="salesImportChart" height="100"></canvas>
+        </div>
+      </div>
+      <div class="col-xl-4">
+        <div class="chart-card h-100">
+          <div class="chart-header">
+            <div>
+              <h6 class="chart-title">Sales by Category</h6>
+              <p class="chart-sub">Top product categories</p>
+            </div>
+          </div>
+          <canvas id="categoryChart" height="200"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- PO TABLE + SHIPMENTS -->
+    <div class="row g-3 mb-4">
+      <div class="col-xl-7">
+        <div class="data-card">
+          <div class="data-card-header">
+            <h6>Recent Purchase Orders</h6>
+            <a href="pages/purchase-orders.html" class="view-all">View All <i class="bi bi-arrow-right"></i></a>
+          </div>
+          <div class="table-responsive">
+            <table class="table ts-table">
+              <thead><tr><th>PO No</th><th>Supplier</th><th>Amount</th><th>Status</th><th>Date</th></tr></thead>
+              <tbody id="po-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-5">
+        <div class="data-card">
+          <div class="data-card-header">
+            <h6><span class="live-dot me-1"></span>Live Shipment Tracking</h6>
+            <a href="pages/shipments.html" class="view-all">View All <i class="bi bi-arrow-right"></i></a>
+          </div>
+          <div class="shipment-list" id="shipment-list"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STOCK + SALES + ACTIVITY -->
+    <div class="row g-3 mb-4">
+      <div class="col-xl-4">
+        <div class="data-card">
+          <div class="data-card-header">
+            <h6><i class="bi bi-exclamation-triangle text-danger me-1"></i>Low Stock Alerts</h6>
+            <a href="pages/inventory.html" class="view-all">Manage <i class="bi bi-arrow-right"></i></a>
+          </div>
+          <div class="stock-list" id="stock-list"></div>
+        </div>
+      </div>
+      <div class="col-xl-5">
+        <div class="data-card">
+          <div class="data-card-header">
+            <h6>Recent Sales Orders</h6>
+            <a href="pages/sales-orders.html" class="view-all">View All <i class="bi bi-arrow-right"></i></a>
+          </div>
+          <div class="table-responsive">
+            <table class="table ts-table">
+              <thead><tr><th>SO No</th><th>Customer</th><th>Amount</th><th>Status</th></tr></thead>
+              <tbody id="so-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-3">
+        <div class="data-card">
+          <div class="data-card-header">
+            <h6>Recent Activities</h6>
+          </div>
+          <div class="activity-feed" id="activity-feed"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROFIT CHART -->
+    <div class="row g-3 mb-4">
+      <div class="col-12">
+        <div class="chart-card">
+          <div class="chart-header">
+            <div>
+              <h6 class="chart-title">Profit / Loss Overview</h6>
+              <p class="chart-sub">Net profit per month after all import costs</p>
+            </div>
+            <div class="chart-actions">
+              <button class="chart-btn active" data-period="monthly">Monthly</button>
+              <button class="chart-btn" data-period="quarterly">Quarterly</button>
+            </div>
+          </div>
+          <canvas id="profitChart" height="60"></canvas>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end page-body -->
+
+  <footer class="page-footer">
+    <span>© 2024 TradeSync. All rights reserved.</span>
+    <span>Version 2.0.0</span>
+  </footer>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

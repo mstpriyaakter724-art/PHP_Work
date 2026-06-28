@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login – TradeSync</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css"/>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&display=swap"/>
+  <style>
+    :root {
+      --primary: #1a56db;
+      --primary-dark: #1240a8;
+      --body-bg: #f1f5f9;
+      --card-bg: #fff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #1a56db 100%);
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px;
+    }
+    .login-card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 44px 40px;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.3);
+    }
+    .login-brand {
+      text-align: center; margin-bottom: 32px;
+    }
+    .login-icon {
+      width: 60px; height: 60px;
+      background: linear-gradient(135deg, #1a56db, #6366f1);
+      border-radius: 16px;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 14px;
+      font-size: 26px; color: #fff;
+    }
+    .login-brand h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 24px; font-weight: 700; color: #0f172a; margin: 0;
+    }
+    .login-brand p { font-size: 13.5px; color: #64748b; margin: 4px 0 0; }
+    .form-label { font-size: 13px; font-weight: 600; color: #374151; margin-bottom: 5px; }
+    .form-control {
+      font-size: 14px; padding: 10px 14px; border-radius: 10px;
+      border: 1.5px solid #e2e8f0;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .form-control:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 4px rgba(26,86,219,0.1);
+    }
+    .input-group-text {
+      background: #f8fafc; border: 1.5px solid #e2e8f0; border-right: none;
+      border-radius: 10px 0 0 10px; color: #64748b;
+    }
+    .input-group .form-control { border-left: none; border-radius: 0 10px 10px 0; }
+    .btn-login {
+      background: linear-gradient(135deg, var(--primary), #6366f1);
+      color: #fff; border: none; border-radius: 10px;
+      padding: 12px; font-size: 15px; font-weight: 600;
+      width: 100%; cursor: pointer;
+      transition: opacity 0.15s, transform 0.12s;
+      letter-spacing: 0.2px;
+    }
+    .btn-login:hover { opacity: 0.92; transform: translateY(-1px); }
+    .btn-login:active { transform: none; }
+    .alert-login {
+      background: #fee2e2; border: 1px solid #fecaca;
+      color: #991b1b; border-radius: 10px; padding: 10px 14px;
+      font-size: 13px; display: none;
+    }
+    .divider {
+      text-align: center; color: #94a3b8; font-size: 12.5px;
+      margin: 20px 0; position: relative;
+    }
+    .divider::before, .divider::after {
+      content: ''; position: absolute; top: 50%; width: 42%; height: 1px;
+      background: #e2e8f0;
+    }
+    .divider::before { left: 0; }
+    .divider::after { right: 0; }
+    .demo-box {
+      background: #f1f5f9; border-radius: 10px;
+      padding: 12px 14px; font-size: 12.5px; color: #475569;
+    }
+    .demo-box strong { color: #0f172a; }
+  </style>
+</head>
+<body>
+<div class="login-card">
+  <div class="login-brand">
+    <div class="login-icon"><i class="bi bi-boxes"></i></div>
+    <h2>TradeSync</h2>
+    <p>Smart Trade Management System</p>
+  </div>
+
+  <div id="loginAlert" class="alert-login mb-3">
+    <i class="bi bi-exclamation-triangle me-2"></i><span id="alertMsg">Invalid credentials.</span>
+  </div>
+
+  <form id="loginForm">
+    <div class="mb-3">
+      <label class="form-label">Email Address</label>
+      <div class="input-group">
+        <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+        <input type="email" class="form-control" id="email" placeholder="admin@tradesync.com" required autocomplete="email"/>
+      </div>
+    </div>
+    <div class="mb-4">
+      <label class="form-label">Password</label>
+      <div class="input-group">
+        <span class="input-group-text"><i class="bi bi-lock"></i></span>
+        <input type="password" class="form-control" id="password" placeholder="Enter password" required autocomplete="current-password"/>
+        <button type="button" class="btn" style="border:1.5px solid #e2e8f0;border-left:none;border-radius:0 10px 10px 0;background:#f8fafc;color:#64748b;padding:0 12px;" id="togglePass">
+          <i class="bi bi-eye"></i>
+        </button>
+      </div>
+    </div>
+    <button type="submit" class="btn-login" id="loginBtn">
+      <i class="bi bi-box-arrow-in-right me-2"></i>Sign In
+    </button>
+  </form>
+
+  <div class="divider">Demo Credentials</div>
+  <div class="demo-box">
+    <div><strong>Email:</strong> admin@tradesync.com</div>
+    <div><strong>Password:</strong> admin123</div>
+  </div>
+</div>
+
+<script>
+document.getElementById('togglePass').addEventListener('click', function () {
+  const pwd = document.getElementById('password');
+  const icon = this.querySelector('i');
+  if (pwd.type === 'password') {
+    pwd.type = 'text';
+    icon.className = 'bi bi-eye-slash';
+  } else {
+    pwd.type = 'password';
+    icon.className = 'bi bi-eye';
+  }
+});
+
+document.getElementById('loginForm').addEventListener('submit', function (e) {
+  e.preventDefault();
+  const email    = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+  const btn      = document.getElementById('loginBtn');
+
+  btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Signing in...';
+  btn.disabled = true;
+
+  // In production: POST to login.php
+  // For demo: check hardcoded credentials
+  setTimeout(() => {
+    if (email === 'admin@tradesync.com' && password === 'admin123') {
+      window.location.href = 'index.html';
+    } else {
+      document.getElementById('loginAlert').style.display = 'block';
+      document.getElementById('alertMsg').textContent = 'Invalid email or password. Please try again.';
+      btn.innerHTML = '<i class="bi bi-box-arrow-in-right me-2"></i>Sign In';
+      btn.disabled = false;
+    }
+  }, 900);
+});
+</script>
+</body>
+</html>

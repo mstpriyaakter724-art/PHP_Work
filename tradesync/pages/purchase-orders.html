@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Purchase Orders – TradeSync</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css"/>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"/>
+  <link rel="stylesheet" href="../css/style.css"/>
+  <style>
+    .page-header-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .page-header-bar h4 {
+      font-family: var(--font-display); font-weight: 700; font-size: 20px;
+      margin: 0; color: var(--text-main);
+    }
+    .filter-bar {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 14px 20px;
+      margin-bottom: 20px;
+      display: flex; gap: 12px; align-items: center; flex-wrap: wrap;
+      box-shadow: var(--shadow);
+    }
+    .filter-bar .form-control, .filter-bar .form-select {
+      font-size: 13px; height: 36px;
+      border-color: var(--card-border);
+      background: var(--body-bg);
+      color: var(--text-main);
+    }
+    .filter-bar .form-control:focus, .filter-bar .form-select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(26,86,219,0.12);
+    }
+    .btn-primary-ts {
+      background: var(--primary); color: #fff; border: none;
+      border-radius: var(--radius-sm); padding: 7px 18px;
+      font-size: 13px; font-weight: 600; cursor: pointer;
+      display: inline-flex; align-items: center; gap: 6px;
+      transition: background 0.15s;
+    }
+    .btn-primary-ts:hover { background: var(--primary-dark); }
+    .btn-outline-ts {
+      background: none;
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-sm); padding: 7px 16px;
+      font-size: 13px; color: var(--text-muted); cursor: pointer;
+      display: inline-flex; align-items: center; gap: 6px;
+      transition: all 0.15s;
+    }
+    .btn-outline-ts:hover { border-color: var(--primary); color: var(--primary); }
+    .po-table-wrap {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .po-table-header {
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--card-border);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .po-table-header span { font-size: 13px; color: var(--text-muted); }
+    .table-action-btn {
+      background: none; border: none; color: var(--text-muted);
+      cursor: pointer; padding: 4px 7px; border-radius: 5px;
+      font-size: 14px; transition: all 0.15s;
+    }
+    .table-action-btn:hover { background: var(--primary-light); color: var(--primary); }
+    .table-action-btn.danger:hover { background: #fee2e2; color: var(--danger); }
+    .pagination-bar {
+      padding: 12px 20px;
+      border-top: 1px solid var(--card-border);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .pagination-bar span { font-size: 12.5px; color: var(--text-muted); }
+    .pagination { margin: 0; }
+    .page-link { font-size: 12.5px; color: var(--primary); border-color: var(--card-border); }
+    .page-item.active .page-link { background: var(--primary); border-color: var(--primary); }
+
+    /* Modal */
+    .modal-content {
+      background: var(--card-bg);
+      border-color: var(--card-border);
+      border-radius: var(--radius);
+    }
+    .modal-header {
+      border-bottom-color: var(--card-border);
+      background: var(--body-bg);
+      border-radius: var(--radius) var(--radius) 0 0;
+    }
+    .modal-title { font-family: var(--font-display); font-weight: 700; font-size: 16px; }
+    .modal-footer { border-top-color: var(--card-border); }
+    .form-label { font-size: 12.5px; font-weight: 600; color: var(--text-muted); margin-bottom: 4px; }
+    .form-control, .form-select {
+      font-size: 13.5px;
+      background: var(--body-bg);
+      border-color: var(--card-border);
+      color: var(--text-main);
+    }
+  </style>
+</head>
+<body>
+
+<!-- Sidebar (same as dashboard) -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-brand">
+    <div class="brand-icon"><i class="bi bi-boxes"></i></div>
+    <div class="brand-text">
+      <span class="brand-name">TradeSync</span>
+      <span class="brand-sub">Smart Trade Management</span>
+    </div>
+  </div>
+  <div class="sidebar-search">
+    <i class="bi bi-search"></i>
+    <input type="text" placeholder="Search menu..."/>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Overview</div>
+    <a href="../index.html" class="nav-item"><i class="bi bi-speedometer2"></i><span>Dashboard</span></a>
+    <div class="nav-section-label">Import Process</div>
+    <a href="suppliers.html" class="nav-item"><i class="bi bi-building"></i><span>Suppliers</span></a>
+    <a href="purchase-orders.html" class="nav-item active"><i class="bi bi-file-earmark-text"></i><span>Purchase Orders</span></a>
+    <a href="proforma-invoices.html" class="nav-item"><i class="bi bi-receipt"></i><span>Proforma Invoices</span></a>
+    <a href="letters-of-credit.html" class="nav-item"><i class="bi bi-bank"></i><span>Letters of Credit</span></a>
+    <a href="shipments.html" class="nav-item"><i class="bi bi-truck"></i><span>Shipments</span></a>
+    <a href="import-costs.html" class="nav-item"><i class="bi bi-currency-dollar"></i><span>Import Costs</span></a>
+    <a href="grn.html" class="nav-item"><i class="bi bi-clipboard-check"></i><span>GRN</span></a>
+    <div class="nav-section-label">Inventory</div>
+    <a href="products.html" class="nav-item"><i class="bi bi-box-seam"></i><span>Products</span></a>
+    <a href="inventory.html" class="nav-item"><i class="bi bi-grid-3x3-gap"></i><span>Inventory</span></a>
+    <a href="warehouses.html" class="nav-item"><i class="bi bi-houses"></i><span>Warehouses</span></a>
+    <a href="stock-movements.html" class="nav-item"><i class="bi bi-arrow-left-right"></i><span>Stock Movements</span></a>
+    <div class="nav-section-label">Sales</div>
+    <a href="customers.html" class="nav-item"><i class="bi bi-people"></i><span>Customers</span></a>
+    <a href="sales-orders.html" class="nav-item"><i class="bi bi-cart3"></i><span>Sales Orders</span></a>
+    <a href="invoices.html" class="nav-item"><i class="bi bi-file-earmark-invoice"></i><span>Invoices</span></a>
+    <a href="deliveries.html" class="nav-item"><i class="bi bi-box-arrow-right"></i><span>Deliveries</span></a>
+    <a href="payments.html" class="nav-item"><i class="bi bi-credit-card"></i><span>Payments</span></a>
+    <div class="nav-section-label">Reports</div>
+    <a href="reports.html" class="nav-item"><i class="bi bi-bar-chart-line"></i><span>All Reports</span></a>
+    <div class="nav-section-label">System</div>
+    <a href="users.html" class="nav-item"><i class="bi bi-person-gear"></i><span>Users</span></a>
+    <a href="roles.html" class="nav-item"><i class="bi bi-shield-check"></i><span>Roles & Permissions</span></a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="user-mini">
+      <div class="user-avatar-sm">A</div>
+      <div class="user-info-sm">
+        <span class="user-name-sm">Admin User</span>
+        <span class="user-role-sm">Super Admin</span>
+      </div>
+      <a href="#" class="logout-btn"><i class="bi bi-box-arrow-right"></i></a>
+    </div>
+  </div>
+</div>
+
+<!-- Main Content -->
+<div class="main-content" id="mainContent">
+  <header class="topbar">
+    <div class="topbar-left">
+      <button class="sidebar-toggle" id="sidebarToggle"><i class="bi bi-list"></i></button>
+      <div class="breadcrumb-area">
+        <span class="page-title">Purchase Orders</span>
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item"><a href="../index.html" style="color:var(--primary);font-size:12px;">Dashboard</a></li>
+            <li class="breadcrumb-item active" style="font-size:12px;">Purchase Orders</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <button class="topbar-btn" id="themeToggle"><i class="bi bi-moon-stars"></i></button>
+      <button class="topbar-btn position-relative"><i class="bi bi-bell"></i><span class="notif-badge">4</span></button>
+      <div class="user-avatar">A</div>
+    </div>
+  </header>
+
+  <div class="page-body">
+    <!-- Header -->
+    <div class="page-header-bar">
+      <div>
+        <h4>Purchase Orders</h4>
+        <p style="font-size:13px;color:var(--text-muted);margin:2px 0 0;">Manage all import purchase orders</p>
+      </div>
+      <div class="d-flex gap-2">
+        <button class="btn-outline-ts"><i class="bi bi-download"></i> Export</button>
+        <button class="btn-primary-ts" data-bs-toggle="modal" data-bs-target="#addPOModal">
+          <i class="bi bi-plus-lg"></i> New Purchase Order
+        </button>
+      </div>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="row g-3 mb-4">
+      <div class="col-md-3 col-6">
+        <div class="kpi-card kpi-import" style="padding:14px 16px;">
+          <div class="kpi-icon" style="width:36px;height:36px;font-size:16px;"><i class="bi bi-file-earmark-text"></i></div>
+          <div class="kpi-body">
+            <div class="kpi-label">Total POs</div>
+            <div class="kpi-value" style="font-size:18px;">88</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="kpi-card kpi-inventory" style="padding:14px 16px;">
+          <div class="kpi-icon" style="width:36px;height:36px;font-size:16px;background:#fef3c7;color:#d97706"><i class="bi bi-hourglass-split"></i></div>
+          <div class="kpi-body">
+            <div class="kpi-label">Pending</div>
+            <div class="kpi-value" style="font-size:18px;">23</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="kpi-card kpi-sales" style="padding:14px 16px;">
+          <div class="kpi-icon" style="width:36px;height:36px;font-size:16px;"><i class="bi bi-check2-circle"></i></div>
+          <div class="kpi-body">
+            <div class="kpi-label">Approved</div>
+            <div class="kpi-value" style="font-size:18px;">41</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="kpi-card kpi-profit" style="padding:14px 16px;">
+          <div class="kpi-icon" style="width:36px;height:36px;font-size:16px;"><i class="bi bi-currency-dollar"></i></div>
+          <div class="kpi-body">
+            <div class="kpi-label">Total Value</div>
+            <div class="kpi-value" style="font-size:18px;">$4.2M</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filter Bar -->
+    <div class="filter-bar">
+      <div class="input-group" style="max-width:240px;">
+        <span class="input-group-text" style="background:var(--body-bg);border-color:var(--card-border);color:var(--text-muted);"><i class="bi bi-search"></i></span>
+        <input type="text" class="form-control" id="poSearch" placeholder="Search PO No, Supplier...">
+      </div>
+      <select class="form-select" style="max-width:160px;" id="statusFilter">
+        <option value="">All Status</option>
+        <option>Pending</option>
+        <option>Approved</option>
+        <option>Shipped</option>
+        <option>Received</option>
+        <option>Cancelled</option>
+      </select>
+      <input type="date" class="form-control" style="max-width:160px;" id="dateFrom" title="From Date">
+      <input type="date" class="form-control" style="max-width:160px;" id="dateTo" title="To Date">
+      <button class="btn-outline-ts" onclick="clearFilters()"><i class="bi bi-x-circle"></i> Clear</button>
+    </div>
+
+    <!-- Table -->
+    <div class="po-table-wrap">
+      <div class="po-table-header">
+        <span id="tableCount">Showing 10 of 88 records</span>
+        <div class="d-flex gap-2 align-items-center">
+          <select class="form-select form-select-sm" style="width:100px;font-size:12px;">
+            <option>10 / page</option>
+            <option>25 / page</option>
+            <option>50 / page</option>
+          </select>
+        </div>
+      </div>
+      <div class="table-responsive">
+        <table class="table ts-table" id="poTable">
+          <thead>
+            <tr>
+              <th><input type="checkbox" class="form-check-input"/></th>
+              <th>PO No <i class="bi bi-arrow-down-up ms-1" style="font-size:10px;cursor:pointer;"></i></th>
+              <th>Supplier</th>
+              <th>PO Date</th>
+              <th>Total Amount</th>
+              <th>Status</th>
+              <th>Created By</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="poTableBody">
+            <!-- Rows injected by JS -->
+          </tbody>
+        </table>
+      </div>
+      <div class="pagination-bar">
+        <span id="paginationInfo">Page 1 of 9</span>
+        <nav>
+          <ul class="pagination pagination-sm">
+            <li class="page-item disabled"><a class="page-link" href="#">‹</a></li>
+            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item"><a class="page-link" href="#">›</a></li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+
+  <footer class="page-footer">
+    <span>© 2024 TradeSync. All rights reserved.</span>
+    <span>Version 1.0.0</span>
+  </footer>
+</div>
+
+<!-- Add PO Modal -->
+<div class="modal fade" id="addPOModal" tabindex="-1">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title"><i class="bi bi-plus-circle me-2 text-primary"></i>New Purchase Order</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label">PO Number</label>
+            <input type="text" class="form-control" placeholder="Auto-generated" readonly style="background:var(--body-bg);">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Supplier *</label>
+            <select class="form-select">
+              <option>Select Supplier</option>
+              <option>Shenzhen Electronics</option>
+              <option>Global Textiles Ltd</option>
+              <option>Korea Auto Parts</option>
+              <option>Vietnam Plastics Co</option>
+              <option>China Steel Corp</option>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">PO Date *</label>
+            <input type="date" class="form-control">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Status</label>
+            <select class="form-select">
+              <option>Pending</option>
+              <option>Approved</option>
+            </select>
+          </div>
+          <div class="col-12"><hr style="border-color:var(--card-border);margin:4px 0;"></div>
+          <div class="col-12">
+            <label class="form-label">PO Items</label>
+            <table class="table ts-table" style="font-size:12.5px;">
+              <thead><tr><th>Product</th><th>Qty</th><th>Unit Price</th><th>Total</th><th></th></tr></thead>
+              <tbody id="poItemsBody">
+                <tr>
+                  <td><input type="text" class="form-control form-control-sm" placeholder="Product name"></td>
+                  <td><input type="number" class="form-control form-control-sm" placeholder="Qty" style="width:70px;"></td>
+                  <td><input type="number" class="form-control form-control-sm" placeholder="Price" style="width:90px;"></td>
+                  <td><input type="text" class="form-control form-control-sm" placeholder="0.00" readonly style="width:90px;background:var(--body-bg);"></td>
+                  <td><button class="table-action-btn danger" onclick="this.closest('tr').remove()"><i class="bi bi-trash"></i></button></td>
+                </tr>
+              </tbody>
+            </table>
+            <button class="btn-outline-ts" style="font-size:12px;padding:5px 12px;" onclick="addPOItem()"><i class="bi bi-plus"></i> Add Item</button>
+          </div>
+          <div class="col-12 text-end">
+            <strong style="font-size:14px;">Total: <span id="poTotal" style="color:var(--primary);">$0.00</span></strong>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-outline-ts" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn-primary-ts" onclick="savePO()"><i class="bi bi-check-lg"></i> Save Purchase Order</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+<script src="../js/main.js"></script>
+<script>
+// PO Data
+const poData = [
+  { id: 88, po_no: 'PO-2024-0088', supplier: 'Shenzhen Electronics', date: '2024-06-20', amount: 84500, status: 'Pending', created_by: 'Admin' },
+  { id: 87, po_no: 'PO-2024-0087', supplier: 'Global Textiles Ltd', date: '2024-06-18', amount: 31200, status: 'Approved', created_by: 'Reza' },
+  { id: 86, po_no: 'PO-2024-0086', supplier: 'Korea Auto Parts', date: '2024-06-15', amount: 120000, status: 'Shipped', created_by: 'Admin' },
+  { id: 85, po_no: 'PO-2024-0085', supplier: 'Vietnam Plastics Co', date: '2024-06-12', amount: 22800, status: 'Received', created_by: 'Karim' },
+  { id: 84, po_no: 'PO-2024-0084', supplier: 'China Steel Corp', date: '2024-06-09', amount: 98400, status: 'Received', created_by: 'Admin' },
+  { id: 83, po_no: 'PO-2024-0083', supplier: 'Shenzhen Electronics', date: '2024-06-07', amount: 45600, status: 'Approved', created_by: 'Reza' },
+  { id: 82, po_no: 'PO-2024-0082', supplier: 'Taiwan Tech Co', date: '2024-06-03', amount: 63400, status: 'Pending', created_by: 'Admin' },
+  { id: 81, po_no: 'PO-2024-0081', supplier: 'Global Textiles Ltd', date: '2024-05-30', amount: 18900, status: 'Received', created_by: 'Karim' },
+  { id: 80, po_no: 'PO-2024-0080', supplier: 'Japan Electronics', date: '2024-05-27', amount: 205000, status: 'Approved', created_by: 'Admin' },
+  { id: 79, po_no: 'PO-2024-0079', supplier: 'Korea Auto Parts', date: '2024-05-24', amount: 87000, status: 'Shipped', created_by: 'Reza' },
+];
+
+const statusMap = {
+  'Pending':   'badge-pending',
+  'Approved':  'badge-approved',
+  'Shipped':   'badge-shipped',
+  'Received':  'badge-received',
+  'Cancelled': 'badge-pending',
+};
+
+function renderTable(data) {
+  const tbody = document.getElementById('poTableBody');
+  tbody.innerHTML = data.map(row => `
+    <tr>
+      <td><input type="checkbox" class="form-check-input"/></td>
+      <td><span class="mono">${row.po_no}</span></td>
+      <td>${row.supplier}</td>
+      <td>${row.date}</td>
+      <td><strong>$${row.amount.toLocaleString()}</strong></td>
+      <td><span class="badge-ts ${statusMap[row.status]}">${row.status}</span></td>
+      <td>${row.created_by}</td>
+      <td>
+        <button class="table-action-btn" title="View"><i class="bi bi-eye"></i></button>
+        <button class="table-action-btn" title="Edit"><i class="bi bi-pencil"></i></button>
+        <button class="table-action-btn" title="Print"><i class="bi bi-printer"></i></button>
+        <button class="table-action-btn danger" title="Delete"><i class="bi bi-trash"></i></button>
+      </td>
+    </tr>
+  `).join('');
+}
+
+renderTable(poData);
+
+// Search + Filter
+document.getElementById('poSearch').addEventListener('input', filterTable);
+document.getElementById('statusFilter').addEventListener('change', filterTable);
+
+function filterTable() {
+  const search = document.getElementById('poSearch').value.toLowerCase();
+  const status = document.getElementById('statusFilter').value;
+  const filtered = poData.filter(r =>
+    (r.po_no.toLowerCase().includes(search) || r.supplier.toLowerCase().includes(search)) &&
+    (!status || r.status === status)
+  );
+  renderTable(filtered);
+  document.getElementById('tableCount').textContent = `Showing ${filtered.length} of ${poData.length} records`;
+}
+
+function clearFilters() {
+  document.getElementById('poSearch').value = '';
+  document.getElementById('statusFilter').value = '';
+  document.getElementById('dateFrom').value = '';
+  document.getElementById('dateTo').value = '';
+  renderTable(poData);
+  document.getElementById('tableCount').textContent = `Showing ${poData.length} of ${poData.length} records`;
+}
+
+function addPOItem() {
+  const tbody = document.getElementById('poItemsBody');
+  const tr = document.createElement('tr');
+  tr.innerHTML = `
+    <td><input type="text" class="form-control form-control-sm" placeholder="Product name"></td>
+    <td><input type="number" class="form-control form-control-sm" placeholder="Qty" style="width:70px;"></td>
+    <td><input type="number" class="form-control form-control-sm" placeholder="Price" style="width:90px;"></td>
+    <td><input type="text" class="form-control form-control-sm" placeholder="0.00" readonly style="width:90px;background:var(--body-bg);"></td>
+    <td><button class="table-action-btn danger" onclick="this.closest('tr').remove()"><i class="bi bi-trash"></i></button></td>
+  `;
+  tbody.appendChild(tr);
+}
+
+function savePO() {
+  const modal = bootstrap.Modal.getInstance(document.getElementById('addPOModal'));
+  modal.hide();
+  // In a real app, this would send a POST request to a PHP backend
+  alert('Purchase Order saved successfully!\n(In production this would POST to save_po.php)');
+}
+</script>
+</body>
+</html>
