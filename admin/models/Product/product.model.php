@@ -23,7 +23,12 @@ public function set($id,$name,$price,$manufacturer_id)
 public function create(){
     global $db;
 
-    $stmt=$db->query("insert into products (name,price,manufacturer_id)values('$this->name','$this->price','$this->manufacturer_id') ");
+    $stmt=$db->query("insert into products (name,price,manufacturer_id)
+    values(
+            '$this->name',
+            '$this->price',
+            '$this->manufacturer_id')
+            ");
     return $db->insert_id;
 }
 
